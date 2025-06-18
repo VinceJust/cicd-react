@@ -37,6 +37,9 @@ jobs:
       run:
         working-directory: terraform
 
+    outputs:
+      ec2_ip: ${{ steps.ec2_output.outputs.EC2_IP }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,11 +70,13 @@ jobs:
           if [[ -z "$EC2_IP" ]]; then
             echo "EC2 public IP not found"; exit 1
           fi
-          echo "EC2_IP=$EC2_IP" >> $GITHUB_ENV
+          echo "::set-output name=EC2_IP::$EC2_IP"
 
   app_deploy:
     needs: infra_provision
     runs-on: ubuntu-latest
+    env:
+      EC2_IP: ${{ needs.infra_provision.outputs.ec2_ip }}
 
     steps:
       - name: Checkout code
@@ -90,5 +95,6 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -r dist/* ubuntu@${{ env.EC2_IP }}:/var/www/html
-          ssh ubuntu@${{ env.EC2_IP }} "sudo systemctl restart nginx"
+          echo "Deploying to $EC2_IP..."
+          scp -r dist/* ubuntu@$EC2_IP:/var/www/html
+          ssh ubuntu@$EC2_IP "sudo systemctl restart nginx"
