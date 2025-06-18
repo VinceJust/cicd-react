@@ -1,7 +1,7 @@
 # SSH Key Pair (verwende z. B. einen extern erstellten öffentlichen Schlüssel)
 resource "aws_key_pair" "cicd_key" {
   key_name   = "cicd-key"
-  public_key = file(var.public_key_path) # Pfad zu deiner .pub Datei (z. B. id_rsa.pub)
+  public_key = var.public_key # <-- direkt aus secret
 }
 
 # VPC
