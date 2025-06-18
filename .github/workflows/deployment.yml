@@ -93,6 +93,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
+      - name: Debug SSH Agent Keys
+        run: ssh-add -1
+
       - name: Add EC2 Host to known_hosts
         run: |
           echo "Adding $EC2_IP to known_hosts"
