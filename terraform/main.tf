@@ -107,6 +107,6 @@ resource "aws_instance" "web" {
               EOF
 
   tags = {
-    Name = "cicd-ec2-instance"
+    Name = "cicd-ec2-instance-v2"
   }
 }
