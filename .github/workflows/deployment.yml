@@ -94,7 +94,7 @@ jobs:
           ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
       - name: Debug SSH Agent Keys
-        run: ssh-add -1
+        run: ssh-add -l
 
       - name: Add EC2 Host to known_hosts
         run: |
